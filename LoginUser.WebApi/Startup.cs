@@ -7,6 +7,7 @@ using FluentValidation.AspNetCore;
 using LoginUser.WebApi.Context;
 using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
+using LoginUser.WebApi.Middleware;
 using LoginUser.WebApi.Models;
 using LoginUser.WebApi.Services;
 using LoginUser.WebApi.Validators;
@@ -47,6 +48,8 @@ namespace LoginUser.WebApi
             services.AddDbContext<ApplicationDbContext>();//
             services.AddScoped<UserSeeder>();//
             services.AddScoped<IAccountService, AccountService>();//
+            services.AddScoped<ErrorHandlingMiddleware>();
+
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();//uzyjemy tego do hashowania hasel
             services.AddScoped<IValidator<RegisterUserDto>, ValidationRegisterUserDto>();//TODO validator https://youtu.be/exKLvxaPI6Y?t=2512 , https://youtu.be/exKLvxaPI6Y?t=2571
 
@@ -69,6 +72,8 @@ namespace LoginUser.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LoginUser.WebApi v1"));//TODO nie odplaca stronki z /swagger!!!
                 //app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);       
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

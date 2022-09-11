@@ -30,7 +30,6 @@ namespace LoginUser.WebApi.Controllers
             return Ok($"User with email {userDto.Email} was register");
         }
 
-
         // public IActionResult Index()
         // {
         //     return View();
