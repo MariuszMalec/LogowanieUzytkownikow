@@ -7,6 +7,7 @@ using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace LoginUser.WebApi.Services
 {
@@ -14,9 +15,11 @@ namespace LoginUser.WebApi.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
+        public ILogger<AccountService> _logger { get; set; }
 
-        public AccountService(ApplicationDbContext context, IPasswordHasher<User> passwordHasher)
+        public AccountService(ApplicationDbContext context, IPasswordHasher<User> passwordHasher, ILogger<AccountService> logger)
         {
+            _logger = logger;
             _context = context;
             _passwordHasher = passwordHasher;
         }
@@ -41,6 +44,8 @@ namespace LoginUser.WebApi.Services
             newUser.PasswordHash = hashedPassword;
             _context.Users.Add(newUser);
             _context.SaveChanges();
+
+            _logger.LogInformation($"User with mail {userDto.Email} was register");
         }
     }
 }

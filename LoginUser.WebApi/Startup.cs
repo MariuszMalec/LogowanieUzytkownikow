@@ -40,7 +40,7 @@ namespace LoginUser.WebApi
             // var connectionString = Configuration.GetConnectionString("Database");
             // services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
 
-            string databaseAsString = Configuration["ConnectionStrings:Database"];// dostep do appsettings.json file
+            string databaseAsString = Configuration["ConnectionStrings:Database"];
 
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
