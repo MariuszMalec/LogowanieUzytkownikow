@@ -40,7 +40,7 @@ namespace LoginUser.WebApi
             // var connectionString = Configuration.GetConnectionString("Database");
             // services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
 
-            string databaseAsString = Configuration["ConnectionStrings:Database"];
+            string databaseAsString = Configuration["ConnectionStrings:Database"];// dostep do appsettings.json file
 
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
@@ -48,7 +48,7 @@ namespace LoginUser.WebApi
             services.AddScoped<UserSeeder>();//
             services.AddScoped<IAccountService, AccountService>();//
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();//uzyjemy tego do hashowania hasel
-            services.AddScoped<IValidator<RegisterUserDto>, ValidationRegisterUserDto>();//TODO nie dziala!!!! https://youtu.be/exKLvxaPI6Y?t=2512 , https://youtu.be/exKLvxaPI6Y?t=2571
+            services.AddScoped<IValidator<RegisterUserDto>, ValidationRegisterUserDto>();//TODO validator https://youtu.be/exKLvxaPI6Y?t=2512 , https://youtu.be/exKLvxaPI6Y?t=2571
 
             services.AddSwaggerGen(c =>
             {

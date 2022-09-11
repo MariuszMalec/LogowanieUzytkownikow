@@ -22,6 +22,13 @@ namespace LoginUser.WebApi.Services
         }
         public void RegisterUser(RegisterUserDto userDto)
         {
+            //reczna validacja ale mozna zrobic ValidationRegisterUserDto tylko w controlerze musi byc atrybut [ApiController]!!!
+            // var emailExist = _context.Users.Any(u=>u.Email == userDto.Email);
+            // if (emailExist)
+            // {
+            //     throw new Exception($"Email {userDto.Email} exist yet!");
+            // }
+
             var newUser = new User()
             {
                 Email = userDto.Email,

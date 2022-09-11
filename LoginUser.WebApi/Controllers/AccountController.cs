@@ -12,6 +12,7 @@ namespace LoginUser.WebApi.Controllers
 {
     [Route("api/account")]
     [Route("[controller]")]
+    [ApiController] //TODO to musi byc aby zadzialaly automatyczne validatory!!
     public class AccountController : ControllerBase
     {
          private readonly IAccountService _accountService;
@@ -26,7 +27,7 @@ namespace LoginUser.WebApi.Controllers
         public IActionResult RegisterUser([FromBody] RegisterUserDto userDto)
         {
             _accountService.RegisterUser(userDto);
-            return Ok($"User with email {userDto.Email} was resister");
+            return Ok($"User with email {userDto.Email} was register");
         }
 
 
