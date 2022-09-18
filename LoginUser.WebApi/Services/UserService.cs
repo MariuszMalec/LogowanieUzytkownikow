@@ -76,6 +76,7 @@ namespace LoginUser.WebApi.Services
             {
                 throw new NotFoundException("User not found");
             }
+
             var result = _mapper.Map<UserDto>(user);
             return result;
         }

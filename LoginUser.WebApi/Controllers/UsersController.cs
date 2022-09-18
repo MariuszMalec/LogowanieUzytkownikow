@@ -1,6 +1,7 @@
 ﻿using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace LoginUser.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,6 +23,7 @@ namespace LoginUser.WebApi.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Get()
         {
             var users = await _userService.GetAll();

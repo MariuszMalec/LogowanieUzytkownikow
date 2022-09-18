@@ -15,7 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace LoginUser.WebApi
 {
@@ -32,28 +34,29 @@ namespace LoginUser.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var authenticationSettings = new AuthenticationSettings();
+            var authenticationSettings = new AuthenticationSettings();//https://youtu.be/exKLvxaPI6Y?t=3094
 
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
             services.AddSingleton(authenticationSettings);
 
-            //services.AddAuthentication(option =>
-            //{
-            //    option.DefaultAuthenticateScheme = "Bearer";
-            //    option.DefaultScheme = "Bearer";
-            //    option.DefaultChallengeScheme = "Bearer";
-            //}).AddJwtBearer(cfg =>
-            //{
-            //    cfg.RequireHttpsMetadata = false;
-            //    cfg.SaveToken = true;
-            //    cfg.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidIssuer = authenticationSettings.JwtIssuer,
-            //        ValidAudience = authenticationSettings.JwtIssuer,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
-            //    };
-            //});
+            //https://youtu.be/exKLvxaPI6Y?t=3216
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = "Bearer";
+                option.DefaultScheme = "Bearer";
+                option.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+                };
+            });
 
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
@@ -89,7 +92,9 @@ namespace LoginUser.WebApi
                 //app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);       
             }
 
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseAuthentication();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>(); 
 
             app.UseHttpsRedirection();
 
