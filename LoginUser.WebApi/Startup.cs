@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using LoginUser.WebApi.Authentication;
 using LoginUser.WebApi.Context;
 using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
@@ -13,14 +10,11 @@ using LoginUser.WebApi.Services;
 using LoginUser.WebApi.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace LoginUser.WebApi
@@ -38,15 +32,18 @@ namespace LoginUser.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // var connectionString = Configuration.GetConnectionString("Database");
-            // services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
+            var authenticationSettings = new AuthenticationSettings();
 
-            string databaseAsString = Configuration["ConnectionStrings:Database"];
+            Configuration.GetSection("Authentication").Bind(authenticationSettings);
+
+            services.AddSingleton(authenticationSettings);
 
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
             services.AddDbContext<ApplicationDbContext>();//
             services.AddScoped<UserSeeder>();//
+            services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<IUserService, UserService>();//
             services.AddScoped<IAccountService, AccountService>();//
             services.AddScoped<ErrorHandlingMiddleware>();
 
@@ -60,9 +57,11 @@ namespace LoginUser.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserSeeder seeder) //TODO wstzykujemy seedera
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserSeeder seeder,
+            ApplicationDbContext context) //TODO wstzykujemy seedera
         {
-
+            context?.Database.Migrate();
             seeder.Seed();//
 
             if (env.IsDevelopment())

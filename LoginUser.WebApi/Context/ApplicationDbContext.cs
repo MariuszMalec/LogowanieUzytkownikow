@@ -10,7 +10,7 @@ namespace LoginUser.WebApi.Context
     public class ApplicationDbContext : DbContext
     {
         private string _connectionString = 
-        "Server=localhost\\sqlexpress;Database=UserDb;Trusted_Connection=True;";
+        "Server=localhost\\sqlexpress;Database=UserDb;Trusted_Connection=True;MultipleActiveResultSets=True;";
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
 
@@ -27,7 +27,8 @@ namespace LoginUser.WebApi.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            //optionsBuilder.UseSqlServer(_connectionString);//TODO nie dziala blad bazy sql z logowaniem
+            optionsBuilder.UseSqlite("Data Source=.\\Database\\UsersAndRolesDb.db");
         }
     }
 }

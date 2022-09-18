@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace LoginUser.WebApi.Controllers
 {
-    [Route("api/account")]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController] //TODO to musi byc aby zadzialaly automatyczne validatory!!
     public class AccountController : ControllerBase
     {
@@ -23,17 +16,18 @@ namespace LoginUser.WebApi.Controllers
         }
 
         [HttpPost("Register")]
-        //[HttpPost]
         public IActionResult RegisterUser([FromBody] RegisterUserDto userDto)
         {
             _accountService.RegisterUser(userDto);
             return Ok($"User with email {userDto.Email} was register");
         }
 
-        // public IActionResult Index()
-        // {
-        //     return View();
-        // }
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] LoginDto dto)
+        {
+            string token = _accountService.GenerateJwt(dto);
+            return Ok(token);
+        }
 
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         // public IActionResult Error()
