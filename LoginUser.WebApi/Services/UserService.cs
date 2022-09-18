@@ -40,6 +40,18 @@ namespace LoginUser.WebApi.Services
             return result;
         }
 
+        public async Task<User> Create(User user)
+        {
+            if (!_dbContext.Users.Any())
+            {
+                throw new NotFoundException("Users not found");
+            }
+            var result = await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
+        }
+
         public async Task Update(int id, UserEditDto user)
         {
             var updateUser = await _dbContext.Users.FindAsync(id);

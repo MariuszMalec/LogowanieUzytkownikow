@@ -43,9 +43,11 @@ namespace LoginUser.WebApi.Controllers
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] User user)
         {
+            await _userService.Create(user);
+            return Ok($"User with email {user.Email} was created");
         }
 
         // DELETE api/<UsersController>/5

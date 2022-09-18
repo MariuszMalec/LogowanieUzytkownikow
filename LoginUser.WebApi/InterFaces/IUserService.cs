@@ -11,5 +11,6 @@ namespace LoginUser.WebApi.InterFaces
         Task Update(int id, UserEditDto user);
         Task<UserDto> GetById(int id);
         Task Delete(int id);
+        Task<User> Create(User user);
     }
 }

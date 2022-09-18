@@ -38,6 +38,23 @@ namespace LoginUser.WebApi
 
             services.AddSingleton(authenticationSettings);
 
+            //services.AddAuthentication(option =>
+            //{
+            //    option.DefaultAuthenticateScheme = "Bearer";
+            //    option.DefaultScheme = "Bearer";
+            //    option.DefaultChallengeScheme = "Bearer";
+            //}).AddJwtBearer(cfg =>
+            //{
+            //    cfg.RequireHttpsMetadata = false;
+            //    cfg.SaveToken = true;
+            //    cfg.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidIssuer = authenticationSettings.JwtIssuer,
+            //        ValidAudience = authenticationSettings.JwtIssuer,
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+            //    };
+            //});
+
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
             services.AddDbContext<ApplicationDbContext>();//
