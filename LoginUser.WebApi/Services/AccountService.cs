@@ -69,6 +69,16 @@ namespace LoginUser.WebApi.Services
                 throw new BadRequestException("Invalid username or password");
             }
 
+            //take role for user
+            //var roleId = _context.Users
+            //    .Where(u => u.Email == dto.Email)
+            //    .Select(r => r.RoleId)
+            //    .FirstOrDefault();
+
+            //var role = _context.Roles
+            //    .Where(r => r.Id == roleId)
+            //    .FirstOrDefault();
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

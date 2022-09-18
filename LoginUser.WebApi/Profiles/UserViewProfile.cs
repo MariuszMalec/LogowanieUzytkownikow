@@ -8,7 +8,11 @@ namespace LoginUser.WebApi.Profiles
     {
         public UserViewProfile()
         {
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>()
+                .ForMember(d => d.RoleName, o => o.MapFrom(s => $"{s.Role.Name}"))
+                //.ForMember(d => d.Id, o => o.Ignore())
+                ;
+            CreateMap<User, UserEditDto>();
         }
     }
 }

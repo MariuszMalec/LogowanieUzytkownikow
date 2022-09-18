@@ -31,14 +31,16 @@ namespace LoginUser.WebApi.Services
             {
                 throw new NotFoundException("Users not found");
             }
-            var users = await _dbContext.Users.ToListAsync();
+            var users = await _dbContext.Users
+                .Include(u => u.Role)//TODO dodalem role do widoku
+                .ToListAsync();
 
             var result = _mapper.Map<IEnumerable<UserDto>>(users);
 
             return result;
         }
 
-        public async Task Update(int id, User user)
+        public async Task Update(int id, UserEditDto user)
         {
             var updateUser = await _dbContext.Users.FindAsync(id);
             if (updateUser == null)
@@ -50,7 +52,7 @@ namespace LoginUser.WebApi.Services
             updateUser.DataOfBirth = user.DataOfBirth;
             updateUser.Nationality = user.Nationality;
 
-            _logger.LogInformation($"User with email {user.Email} was edited");
+            _logger.LogInformation($"User with name {user.LastName} was edited");
             _dbContext.Users.Update(updateUser);
             await _dbContext.SaveChangesAsync();
         }

@@ -8,7 +8,7 @@ namespace LoginUser.WebApi.InterFaces
     public interface IUserService
     {
         Task<IEnumerable<UserDto>> GetAll();
-        Task Update(int id, User user);
+        Task Update(int id, UserEditDto user);
         Task<UserDto> GetById(int id);
         Task Delete(int id);
     }

@@ -36,10 +36,10 @@ namespace LoginUser.WebApi.Controllers
 
         // POST api/<UsersController>
         [HttpPost("{id}")]
-        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] User user)
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] UserEditDto user)
         {
             await _userService.Update(id, user);
-            return Ok($"User with email {user.Email} was edited");
+            return Ok($"User with name {user.LastName} was edited");
         }
 
         // PUT api/<UsersController>/5
