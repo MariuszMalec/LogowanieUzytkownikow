@@ -23,7 +23,7 @@ namespace LoginUser.WebApi.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        [AllowAnonymous]//bez naglowka autoryzacji
+        [AllowAnonymous]//bez naglowka autoryzacji      
         public async Task<IActionResult> Get()
         {
             //HttpContext.User.IsInRole("Admin"); //mozna tak ale lepiej nadac atrybuty
@@ -34,6 +34,7 @@ namespace LoginUser.WebApi.Controllers
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
         [Authorize(Policy = "HasNationality")]
+        [Authorize(Policy = "Atleast20")]
         public async Task<UserDto> Get(int id)
         {
             return await _userService.GetById(id);

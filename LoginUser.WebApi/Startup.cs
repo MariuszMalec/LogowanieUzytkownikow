@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using LoginUser.WebApi.Authentication;
+using LoginUser.WebApi.Authorization;
 using LoginUser.WebApi.Context;
 using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
@@ -8,6 +9,7 @@ using LoginUser.WebApi.Middleware;
 using LoginUser.WebApi.Models;
 using LoginUser.WebApi.Services;
 using LoginUser.WebApi.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -61,9 +63,10 @@ namespace LoginUser.WebApi
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "polish"));
-                //options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+                options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));//https://youtu.be/Ei7Uk-UgSAY?t=1557
             });
 
+            services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
             services.AddDbContext<ApplicationDbContext>();//
