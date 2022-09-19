@@ -6,6 +6,6 @@ namespace LoginUser.WebApi.InterFaces
     public interface IAccountService
     {
         Task RegisterUser(RegisterUserDto userDto);
-        string GenerateJwt(LoginDto dto);
+        Task<string> GenerateJwt(LoginDto dto);
     }
 }

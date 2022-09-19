@@ -53,11 +53,11 @@ namespace LoginUser.WebApi.Services
             _logger.LogInformation($"User with mail {userDto.Email} was register");
         }
 
-        public string GenerateJwt(LoginDto dto)
+        public async Task<string> GenerateJwt(LoginDto dto)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(u => u.Email == dto.Email);
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user is null)
             {
