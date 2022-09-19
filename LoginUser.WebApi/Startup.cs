@@ -57,6 +57,12 @@ namespace LoginUser.WebApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
                 };
             });
+            //wlasna polityka autoryzacji https://youtu.be/Ei7Uk-UgSAY?t=1114
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "polish"));
+                //options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+            });
 
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 

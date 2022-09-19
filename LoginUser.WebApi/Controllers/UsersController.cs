@@ -11,7 +11,7 @@ namespace LoginUser.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -23,15 +23,17 @@ namespace LoginUser.WebApi.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        [Authorize(Roles = "Admin,Manager")]
+        [AllowAnonymous]//bez naglowka autoryzacji
         public async Task<IActionResult> Get()
         {
+            //HttpContext.User.IsInRole("Admin"); //mozna tak ale lepiej nadac atrybuty
             var users = await _userService.GetAll();
             return Ok(users);
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "HasNationality")]
         public async Task<UserDto> Get(int id)
         {
             return await _userService.GetById(id);
@@ -47,8 +49,9 @@ namespace LoginUser.WebApi.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Put([FromBody] User user)
-        {
+        {            
             await _userService.Create(user);
             return Ok($"User with email {user.Email} was created");
         }

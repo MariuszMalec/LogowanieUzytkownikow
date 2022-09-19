@@ -84,7 +84,7 @@ namespace LoginUser.WebApi.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
+                new Claim(ClaimTypes.Role, $"{user.Role.Name}"),//TODO dzieki temu w controlerze dzialja atrybuty
                 new Claim("DateOfBirth", user.DataOfBirth.Value.ToString("yyyy-MM-dd")),
             };
 
