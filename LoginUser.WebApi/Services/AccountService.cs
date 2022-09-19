@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoginUser.WebApi.Services
 {
@@ -31,7 +32,7 @@ namespace LoginUser.WebApi.Services
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
         }
-        public void RegisterUser(RegisterUserDto userDto)
+        public async Task RegisterUser(RegisterUserDto userDto)
         {
             var newUser = new User()
             {
@@ -47,7 +48,7 @@ namespace LoginUser.WebApi.Services
 
             newUser.PasswordHash = hashedPassword;
             _context.Users.Add(newUser);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             _logger.LogInformation($"User with mail {userDto.Email} was register");
         }

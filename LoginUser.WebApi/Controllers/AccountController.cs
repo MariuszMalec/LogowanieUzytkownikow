@@ -1,6 +1,7 @@
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LoginUser.WebApi.Controllers
 {
@@ -16,9 +17,9 @@ namespace LoginUser.WebApi.Controllers
         }
 
         [HttpPost("Register")]
-        public IActionResult RegisterUser([FromBody] RegisterUserDto userDto)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto userDto)
         {
-            _accountService.RegisterUser(userDto);
+            await _accountService.RegisterUser(userDto);
             return Ok($"User with email {userDto.Email} was register");
         }
 
