@@ -66,14 +66,18 @@ namespace LoginUser.WebApi
                 options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));//https://youtu.be/Ei7Uk-UgSAY?t=1557
             });
 
-            services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+            services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();//aby zadzialala wlasna policy "Atleast20"
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();//aby zadzialalo np. kasowanie zasobow przez uzytkownika ktory je stworzyl
+
             services.AddControllers().AddFluentValidation();// aby zadzialal IValidator trzeba to dodac! paczka FluentValidation.AspNetCore
 
-            services.AddDbContext<ApplicationDbContext>();//
-            services.AddScoped<UserSeeder>();//
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<UserSeeder>();
+            services.AddScoped<ClientSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
-            services.AddScoped<IUserService, UserService>();//
-            services.AddScoped<IAccountService, AccountService>();//
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IClientService, ClientService>();
             services.AddScoped<ErrorHandlingMiddleware>();
 
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();//uzyjemy tego do hashowania hasel
@@ -87,11 +91,13 @@ namespace LoginUser.WebApi
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            UserSeeder seeder,
+            UserSeeder userSeeder,ClientSeeder cliebtSeeder,
             ApplicationDbContext context) //TODO wstzykujemy seedera
         {
             context?.Database.Migrate();
-            seeder.Seed();//
+            userSeeder.Seed();
+            cliebtSeeder.Seed();
+            
 
             if (env.IsDevelopment())
             {

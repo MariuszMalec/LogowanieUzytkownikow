@@ -13,6 +13,7 @@ namespace LoginUser.WebApi.Context
         "Server=localhost\\sqlexpress;Database=UserDb;Trusted_Connection=True;MultipleActiveResultSets=True;";
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

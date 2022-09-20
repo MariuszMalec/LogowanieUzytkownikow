@@ -13,6 +13,8 @@ namespace LoginUser.WebApi.Profiles
                 //.ForMember(d => d.Id, o => o.Ignore())
                 ;
             CreateMap<User, UserEditDto>();
+            CreateMap<Client, ClientDto>();
+            CreateMap<ClientDto, Client>();
         }
     }
 }
