@@ -16,6 +16,12 @@ namespace LoginUser.WebApi.Authorization
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimumAgeRequirement requirement)
         {
+            if (!context.User.Identity.IsAuthenticated)//TODO sprawdza czy zalogowany
+            {
+                context.Fail();
+                return Task.CompletedTask;
+            }
+
             var dateOfBirth = DateTime.Parse(context.User.FindFirst(c => c.Type == "DateOfBirth").Value);
 
             var userEmail = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
