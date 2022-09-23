@@ -24,10 +24,6 @@ namespace LoginUser.WebApi.Context
                     _dbContext.Clients.AddRange(clients);
                     _dbContext.SaveChanges();
                 }
-                if (!_dbContext.Clients.Any())
-                {
-
-                }
             }
         }
 

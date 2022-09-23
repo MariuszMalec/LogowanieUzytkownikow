@@ -92,14 +92,12 @@ namespace LoginUser.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LoginUser.WebApi", Version = "v1" });
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             UserSeeder userSeeder,ClientSeeder clientSeeder,
-            ApplicationDbContext context) //TODO wstzykujemy seedera
+            ApplicationDbContext context) //TODO wstrzykujemy seedera
         {
 
             //context?.Database.Migrate();
