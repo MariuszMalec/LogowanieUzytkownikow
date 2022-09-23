@@ -100,7 +100,7 @@ namespace LoginUser.WebApi
             ApplicationDbContext context) //TODO wstrzykujemy seedera
         {
 
-            //context?.Database.Migrate();
+            //context?.Database.Migrate();//TODO testy integracyjne nie dzialaja na nierelacyjnej bazie
             userSeeder.Seed();
             clientSeeder.Seed();
           

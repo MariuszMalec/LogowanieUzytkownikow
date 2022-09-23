@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LoginUser.WebApi.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoginUser.WebApi.Context
 {
@@ -22,6 +23,16 @@ namespace LoginUser.WebApi.Context
         {
             if (_dbContext.Database.CanConnect())
             {
+
+                if (_dbContext.Database.IsRelational())
+                {
+                    var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                    if (pendingMigrations != null && pendingMigrations.Any())
+                    {
+                        _dbContext.Database.Migrate();
+                    }
+                }
+
                 if (!_dbContext.Roles.Any())
                 {
                     var roles = GetRoles();

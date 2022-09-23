@@ -33,7 +33,7 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
                         services.Remove(dbContextOptions);
 
                         services
-                         .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("LoginUsersDb"));
+                         .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ClientDb"));
 
                     });
                 })
