@@ -16,15 +16,18 @@ namespace LoginUser.WebApi.Context
 
         public void Seed()
         {
-            if (!_dbContext.Clients.Any())
+            if (_dbContext.Database.CanConnect())
             {
-                var clients = GetClients();
-                _dbContext.Clients.AddRange(clients);
-                _dbContext.SaveChanges();
-            }
-            if (!_dbContext.Clients.Any())
-            {
+                if (!_dbContext.Clients.Any())
+                {
+                    var clients = GetClients();
+                    _dbContext.Clients.AddRange(clients);
+                    _dbContext.SaveChanges();
+                }
+                if (!_dbContext.Clients.Any())
+                {
 
+                }
             }
         }
 

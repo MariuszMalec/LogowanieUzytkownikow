@@ -6,6 +6,7 @@ using LoginUser.WebApi.Exceptions;
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
