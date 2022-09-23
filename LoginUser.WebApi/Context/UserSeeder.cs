@@ -62,7 +62,6 @@ namespace LoginUser.WebApi.Context
             var users = new List<User>() { };
             var user = new User()
                 {
-                    Id = 1,
                     FirstName = "Adminek",
                     LastName = "Admin",
                     DataOfBirth = DateTime.Now,
