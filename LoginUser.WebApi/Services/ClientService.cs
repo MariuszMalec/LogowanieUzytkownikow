@@ -61,6 +61,22 @@ namespace LoginUser.WebApi.Services
             return result;
         }
 
+        public async Task<Client> CreateWithoutAuthorize(ClientDto dto)
+        {
+            var result = _mapper.Map<Client>(dto);
+
+            var client = await _dbContext.Clients.FindAsync(dto.Id);
+            if (client != null)
+            {
+                throw new NotFoundException("Client exist yet!");
+            }
+
+            await _dbContext.Clients.AddAsync(result);
+            await _dbContext.SaveChangesAsync();
+
+            return result;
+        }
+
         public async Task Delete(int id, ClaimsPrincipal user)//https://youtu.be/Ei7Uk-UgSAY?t=2874
         {
             var client = await _dbContext.Clients.FindAsync(id);

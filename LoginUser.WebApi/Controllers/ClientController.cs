@@ -24,7 +24,17 @@ namespace LoginUser.WebApi.Controllers
             var model = await _clientService.GetAll();
             return Ok(model);
         }
+
         
+
+        [HttpPost("CreateWithoutAuthorize")]
+        public async Task<IActionResult> Create([FromBody] ClientDto dto)
+        {
+            await _clientService.CreateWithoutAuthorize(dto);
+            //return Created($"client with email {dto.Email} was created");
+            return Created($"/api/client/createwithoutauthorize/{dto.Id}", null);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ClientDto dto)
         {
