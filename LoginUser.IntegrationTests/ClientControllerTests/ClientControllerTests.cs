@@ -51,5 +51,31 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
             //assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         }
+
+        [Fact]
+        public async Task Create_Client_ReturnInternalServerError()
+        {
+            //arrange
+            var clientDto = new ClientDto()
+            {
+                Id = 1,//nie mozna uzywac w body id bo entity samo nadaje
+                LastName = "Test",
+                FirstName = "Tescik",
+                DataOfBirth = DateTime.Now,
+                CreatedById = 1,
+                Email = "malpa@example.com",
+                Nationality = "usa"
+            };
+
+            var factory = new WebApplicationFactory<Startup>();
+            var client = factory.CreateClient();
+            var content = new StringContent(JsonConvert.SerializeObject(clientDto), UnicodeEncoding.UTF8, "application/json");
+
+            //act
+            var response = await client.PostAsync("/api/Client/CreateWithoutAuthorize", content);
+
+            //assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
+        }
     }
 }
