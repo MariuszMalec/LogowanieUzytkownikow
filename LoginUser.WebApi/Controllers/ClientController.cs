@@ -18,20 +18,25 @@ namespace LoginUser.WebApi.Controllers
             _clientService = clientService;
         }
         // GET: api/<UsersController>
-        [HttpGet]  
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var model = await _clientService.GetAll();
             return Ok(model);
         }
 
-        
+        // GET api/<UsersController>/5
+        [HttpGet("{id}")]
+        public async Task<ClientDto> Get(int id)
+        {
+            return await _clientService.GetById(id);
+        }
+
 
         [HttpPost("CreateWithoutAuthorize")]
         public async Task<IActionResult> Create([FromBody] ClientDto dto)
         {
             await _clientService.CreateWithoutAuthorize(dto);
-            //return Created($"client with email {dto.Email} was created");
             return Created($"/api/client/createwithoutauthorize/{dto.Id}", null);
         }
 

@@ -44,6 +44,19 @@ namespace LoginUser.WebApi.Services
 
             return result;
         }
+
+        public async Task<ClientDto> GetById(int id)
+        {
+            var client = await _dbContext.Clients.FindAsync(id);
+            if (client == null)
+            {
+                throw new NotFoundException("client not found");
+            }
+
+            var result = _mapper.Map<ClientDto>(client);
+            return result;
+        }
+
         public async Task<Client> Create(ClientDto dto, int userId)
         {
             var result = _mapper.Map<Client>(dto);

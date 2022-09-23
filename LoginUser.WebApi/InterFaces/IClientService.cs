@@ -12,5 +12,6 @@ namespace LoginUser.WebApi.InterFaces
         Task<Client> Create(ClientDto client, int userId);
         Task Delete(int id, ClaimsPrincipal user);
         Task<Client> CreateWithoutAuthorize(ClientDto dto);
+        Task<ClientDto> GetById(int id);
     }
 }
