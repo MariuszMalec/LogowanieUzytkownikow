@@ -13,15 +13,20 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
 {
     public class ClientControllerTests
     {
+        private HttpClient _client;
+
+        public ClientControllerTests()
+        {
+            var factory = new WebApplicationFactory<Startup>();
+            _client = factory.CreateClient();
+        }
+
         [Fact]
         public async Task GetAll_Client_ReturnOk()
         {
-            //arrange
-            var factory = new WebApplicationFactory<Startup>();
-            var client = factory.CreateClient();
 
             //act
-            var response = await client.GetAsync("/api/Client");
+            var response = await _client.GetAsync("/api/Client");
 
             //assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -41,12 +46,10 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
                 Nationality = "usa"
             };
 
-            var factory = new WebApplicationFactory<Startup>();
-            var client = factory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(clientDto), UnicodeEncoding.UTF8, "application/json");
 
             //act
-            var response = await client.PostAsync("/api/Client/CreateWithoutAuthorize", content);
+            var response = await _client.PostAsync("/api/Client/CreateWithoutAuthorize", content);
 
             //assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
@@ -67,12 +70,10 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
                 Nationality = "usa"
             };
 
-            var factory = new WebApplicationFactory<Startup>();
-            var client = factory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(clientDto), UnicodeEncoding.UTF8, "application/json");
 
             //act
-            var response = await client.PostAsync("/api/Client/CreateWithoutAuthorize", content);
+            var response = await _client.PostAsync("/api/Client/CreateWithoutAuthorize", content);
 
             //assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
