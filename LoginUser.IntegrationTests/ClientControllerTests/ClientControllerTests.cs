@@ -11,14 +11,13 @@ using Xunit;
 
 namespace LoginUser.IntegrationTests.ClientControllerTests
 {
-    public class ClientControllerTests
+    public class ClientControllerTests : IClassFixture<WebApplicationFactory<Startup>>//wspoldzielenie factory testy nieco szybsze
     {
         private HttpClient _client;
 
-        public ClientControllerTests()
+        public ClientControllerTests(WebApplicationFactory<Startup> factory)
         {
-            var factory = new WebApplicationFactory<Startup>();
-            _client = factory.CreateClient();
+             _client = factory.CreateClient();
         }
 
         [Fact]
