@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using LoginUser.IntegrationTests.Fakes;
 using LoginUser.WebApi;
 using LoginUser.WebApi.Context;
 using LoginUser.WebApi.Entities;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +33,10 @@ namespace LoginUser.IntegrationTests.UserControllerTests
 
                         services.Remove(dbContextOptions);
 
+                        services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();//oszukanie autoryzacji
+
+                        services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));//TODO dodajemy wlasny filtr aby nadpisac co nie dziala wyzej
+
                         services
                          .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("UsersDb"));
 
@@ -39,6 +45,7 @@ namespace LoginUser.IntegrationTests.UserControllerTests
                 .CreateClient();
         }
 
+        //TODO uderzanie do endpointu z autoryzacja
         [Fact]
         public async Task PutUser_WithValidModel_ReturnsOk()
         {
@@ -64,7 +71,6 @@ namespace LoginUser.IntegrationTests.UserControllerTests
             // assert 
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            response.Headers.Location.Should().NotBeNull();
         }
 
         [Fact]
