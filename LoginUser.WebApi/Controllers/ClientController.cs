@@ -1,6 +1,7 @@
 ﻿using LoginUser.WebApi.Entities;
 using LoginUser.WebApi.InterFaces;
 using LoginUser.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace LoginUser.WebApi.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var model = await _clientService.GetAll();
