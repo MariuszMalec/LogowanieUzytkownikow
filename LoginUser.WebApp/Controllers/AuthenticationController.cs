@@ -54,9 +54,12 @@ namespace LoginUser.WebApp.Controllers
 
                 var result = await client.SendAsync(request);
 
-                //var content = await result.Content.ReadAsStringAsync();
+                var content = await result.Content.ReadAsStringAsync();
 
                 //Serilog.Log.Information("User {userName} create new trainer at {date}", userEmail, DateTime.Now);
+
+                if (content.Contains("That email is taken!"))
+                    return Content("That email is taken!!");
 
                 if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
