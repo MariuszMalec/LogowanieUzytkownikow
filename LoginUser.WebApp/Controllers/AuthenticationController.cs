@@ -1,10 +1,12 @@
 ﻿using LoginUser.WebApi.Entities;
+using LoginUser.WebApi.Models;
 using LoginUser.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using NuGet.Common;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -86,6 +88,66 @@ namespace LoginUser.WebApp.Controllers
         public ActionResult YouAreRegister(int id)
         {
             return View();
+        }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                HttpClient client = _httpClientFactory.CreateClient();
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{AppiUrl}/Account/Login");
+
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                request.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+                var result = await client.SendAsync(request);
+
+                var content = await result.Content.ReadAsStringAsync();
+
+                //Serilog.Log.Information("User {userName} create new trainer at {date}", userEmail, DateTime.Now);
+
+                if (content.Contains("Invalid username or password"))
+                    return Content("Invalid username or password!");
+
+                if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    //Serilog.Log.Warning($"Trainer can't be created, email exist yet!");
+                    return Content("You are not logged!");
+                }
+
+                if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    //Serilog.Log.Warning($"Trainer can't be created, email exist yet!");
+                    return Content("You are not logged!");
+                }
+                return RedirectToAction("YouAreLogged", "Authentication", new { param = content });
+            }
+            catch
+            {
+                return View();
+            }
+
+        }
+
+        [HttpGet("YouAreLogged")]
+        public ActionResult YouAreLogged(string param)
+        {
+            ViewBag.Token = param;
+            return View();            
         }
 
         // GET: AuthenticationController/Details/5
