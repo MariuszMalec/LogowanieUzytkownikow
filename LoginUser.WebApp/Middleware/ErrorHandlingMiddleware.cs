@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LoginUser.WebApi.Exceptions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using LoginUser.WebApi.Exceptions;
+using System.Net;
 
-namespace LoginUser.WebApi.Middleware
+namespace LoginUser.WebApp.Middleware
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
@@ -22,26 +17,18 @@ namespace LoginUser.WebApi.Middleware
             {
                 await next.Invoke(context);
             }
-            catch (ForbidException forbidException)
-            {
-                context.Response.StatusCode = 403;
-            }
-            catch (BadRequestException badRequestException)
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync(badRequestException.Message);
-            }
             catch (NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
+                _logger.LogError($"NotFoundException, StatusCode 404!");
                 await context.Response.WriteAsync(notFoundException.Message);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                //co otrzyma klient
-                context.Response.StatusCode = 500;
-                await context.Response.WriteAsync($"Sth went wrong! {e.Message}");
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync(@$"Error {e.Message}");
             }
         }
     }
