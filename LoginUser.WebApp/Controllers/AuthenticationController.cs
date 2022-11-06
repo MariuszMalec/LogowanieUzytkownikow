@@ -121,7 +121,8 @@ namespace LoginUser.WebApp.Controllers
                 //Serilog.Log.Information("User {userName} create new trainer at {date}", userEmail, DateTime.Now);
 
                 if (content.Contains("Invalid username or password"))
-                    return Content("Invalid username or password!");
+                    //return Content("Invalid username or password!");
+                    return RedirectToAction(nameof(InvalidUsernameOrpassword));
 
                 if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -132,7 +133,8 @@ namespace LoginUser.WebApp.Controllers
                 if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     //Serilog.Log.Warning($"Trainer can't be created, email exist yet!");
-                    return Content("You are not logged!");
+                    //return Content("You are not logged!");
+                    return RedirectToAction(nameof(YouAreNotLogged));
                 }
                 return RedirectToAction("YouAreLogged", "Authentication", new { param = content });
             }
@@ -143,11 +145,23 @@ namespace LoginUser.WebApp.Controllers
 
         }
 
+        [HttpGet("InvalidUsernameOrpassword")]
+        public ActionResult InvalidUsernameOrpassword()
+        {
+            return View();
+        }
+
         [HttpGet("YouAreLogged")]
         public ActionResult YouAreLogged(string param)
         {
             ViewBag.Token = param;
             return View();            
+        }
+
+        [HttpGet("YouAreNotLogged")]
+        public ActionResult YouAreNotLogged()
+        {
+            return View();
         }
 
         // GET: AuthenticationController/Details/5
