@@ -136,7 +136,7 @@ namespace LoginUser.WebApp.Controllers
                     //return Content("You are not logged!");
                     return RedirectToAction(nameof(YouAreNotLogged));
                 }
-                return RedirectToAction("YouAreLogged", "Authentication", new { param = content });
+                return RedirectToAction("YouAreLogged", "Authentication", new { param = content , user = JsonConvert.SerializeObject(model) });
             }
             catch
             {
@@ -152,8 +152,10 @@ namespace LoginUser.WebApp.Controllers
         }
 
         [HttpGet("YouAreLogged")]
-        public ActionResult YouAreLogged(string param)
+        public ActionResult YouAreLogged(string param, string user)
         {
+            var model = JsonConvert.DeserializeObject<UserDto>(user);
+            ViewBag.EmailUser = model.Email;
             ViewBag.Token = param;
             return View();            
         }
