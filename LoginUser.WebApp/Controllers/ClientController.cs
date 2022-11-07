@@ -52,19 +52,20 @@ namespace LoginUser.WebApp.Controllers
 
                 //var content = await result.Content.ReadAsStringAsync();
 
-                //request.Headers.Authorization = new AuthenticationHeaderValue("ApiKey", key.ApiKey);
+                //request.Headers.Add("Bearer", model.Token);//TODO to nie dziala
 
-                request.Headers.Add("Token", model.Token);//TODO Apikey do headera
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", model.Token);
+
+                //request.Headers.Add("Email", model.Email);
 
                 var result = await client.SendAsync(request);
-
 
                 if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     //Serilog.Log.Warning($"Trainer can't be created, email exist yet!");
-                    return Content("You are unauthorized!");
+                    //return Content("You are unauthorized!");
+                    return RedirectToAction("Unauthorized");
                 }
-
 
                 var content = await result.Content.ReadAsStringAsync();
 
@@ -92,6 +93,13 @@ namespace LoginUser.WebApp.Controllers
 
             return View(viewModel);
         }
+
+        [HttpGet("Unauthorized")]
+        public ActionResult Unauthorized()
+        {
+            return View();
+        }
+
 
         // GET: ClientController/Details/5
         public ActionResult Details(int id)
