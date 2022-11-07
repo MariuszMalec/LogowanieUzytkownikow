@@ -21,6 +21,7 @@ namespace LoginUser.WebApi.Controllers
         // GET: api/<UsersController>
         [HttpGet]
         [Authorize]
+        //[Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Get()
         {
             var model = await _clientService.GetAll();

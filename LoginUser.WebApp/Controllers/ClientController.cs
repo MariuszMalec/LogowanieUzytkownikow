@@ -35,10 +35,11 @@ namespace LoginUser.WebApp.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
+                //TODO to musialem usunac aby poszli gdy model.email = null, jakos inaczej trza!
+                //if (!ModelState.IsValid)
+                //{
+                //    return View(model);
+                //}
 
                 var client = _httpClientFactory.CreateClient();
 
@@ -66,6 +67,13 @@ namespace LoginUser.WebApp.Controllers
                     //return Content("You are unauthorized!");
                     return RedirectToAction("Unauthorized");
                 }
+
+                if (result.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    //Serilog.Log.Warning($"Trainer can't be created, email exist yet!");
+                    return Content("Access Forbidden!");
+                }
+
 
                 var content = await result.Content.ReadAsStringAsync();
 
