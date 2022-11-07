@@ -14,6 +14,8 @@ namespace LoginUser.WebApp.Models
         public string LastName { get; set; }
         public string Nationality { get; set; }
         public DateTime? DataOfBirth { get; set; }
+        [StringLength(1)]
+        [Range(1,3)]
         public int RoleId { get; set; } = 1;
     }
 }
