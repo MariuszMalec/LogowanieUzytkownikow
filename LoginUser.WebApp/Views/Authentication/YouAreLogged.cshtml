@@ -10,7 +10,17 @@
     <img class="card-img-top" src="https://images.unsplash.com/photo-1460467820054-c87ab43e9b59?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1067&q=80" alt="Card image cap">
     <div class="card-body">
         <h5 class="card-title">Welcome @ViewBag.EmailUser, Your Token is: </h5>
-        <p class="card-text">@ViewBag.Token</p>
+        <p id="copy">@ViewBag.Token</p>
+        <button class="btn-success" type="button" onclick="copyEvent('copy')">Copy token</button>
         <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Go to home</a>
     </div>
 </div>
+
+
+<script>
+    function copyEvent(id) {
+        var str = document.getElementById(id);
+        window.getSelection().selectAllChildren(str);
+        document.execCommand("Copy")
+    }
+</script>

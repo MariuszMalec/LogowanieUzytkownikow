@@ -156,7 +156,7 @@ namespace LoginUser.WebApp.Controllers
         {
             var model = JsonConvert.DeserializeObject<UserDto>(user);
             ViewBag.EmailUser = model.Email;
-            ViewBag.Token = param;
+            ViewBag.Token = param.Replace("\"", "");
             return View();            
         }
 
