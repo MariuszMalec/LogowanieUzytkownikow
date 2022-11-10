@@ -41,6 +41,17 @@ namespace LoginUser.IntegrationTests.ClientControllerTests
         }
 
         [Fact]
+        public async Task GetAll_Client_ReturnUnauthorized()
+        {
+
+            //act
+            var response = await _client.GetAsync("/api/Client");
+
+            //assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
         public async Task GetAll_Client_ReturnOk()
         {
 

@@ -54,7 +54,8 @@ namespace LoginUser.WebApi.Controllers
         public async Task<IActionResult> Put([FromBody] User user)
         {            
             await _userService.Create(user);
-            return Ok($"User with email {user.Email} was created");
+            //return Ok($"User with email {user.Email} was created");
+            return CreatedAtAction(nameof(Put), new { id = user.Id }, user);
         }
 
         // DELETE api/<UsersController>/5
