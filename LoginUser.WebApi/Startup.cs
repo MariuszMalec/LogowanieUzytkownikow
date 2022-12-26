@@ -39,7 +39,7 @@ namespace LoginUser.WebApi
             //    (options => options.UseSqlite(Configuration.GetConnectionString("Database")));
 
             services.AddDbContext<ApplicationDbContext>
-                 (options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+                 (options => options.UseSqlite(Configuration.GetConnectionString("Database")));
 
             var authenticationSettings = new AuthenticationSettings();//https://youtu.be/exKLvxaPI6Y?t=3094
 
@@ -95,7 +95,7 @@ namespace LoginUser.WebApi
 
             services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Logowanie API", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -139,13 +139,19 @@ namespace LoginUser.WebApi
 
             app.UseHttpsRedirection();
 
+            // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
-            {
+            {    
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LoginUser.WebApi v1"));//TODO nie odplaca stronki z /swagger!!!
-                //app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);       
+                app.UseSwaggerUI();
             }
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
