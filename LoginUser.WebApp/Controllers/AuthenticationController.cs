@@ -98,9 +98,6 @@ namespace LoginUser.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
-
-            try
-            {
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -137,12 +134,6 @@ namespace LoginUser.WebApp.Controllers
                     return RedirectToAction(nameof(YouAreNotLogged));
                 }
                 return RedirectToAction("YouAreLogged", "Authentication", new { param = content , user = JsonConvert.SerializeObject(model) });
-            }
-            catch
-            {
-                return View();
-            }
-
         }
 
         [HttpGet("InvalidUsernameOrpassword")]
