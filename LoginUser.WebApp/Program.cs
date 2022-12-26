@@ -1,4 +1,5 @@
 using LoginUser.WebApp.Middleware;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
+
+//Report API Http strzelanie do WebAppiUsers.Api
+// builder.Services.AddHttpClient("LoginUserApi", client =>
+// {
+//     client.BaseAddress = new Uri("https://localhost:5001/");
+//         client.Timeout = new TimeSpan(0, 0, 30);
+//     client.DefaultRequestHeaders.Add(
+//         HeaderNames.Accept, "application/json");
+// });
+
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

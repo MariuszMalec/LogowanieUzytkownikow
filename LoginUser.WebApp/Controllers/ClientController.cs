@@ -12,7 +12,7 @@ namespace LoginUser.WebApp.Controllers
     public class ClientController : Controller
     {
         // GET: ClientController
-        private const string AppiUrl = "https://localhost:44352/api";
+        private const string AppiUrl = "https://localhost:5001/api";
         IHttpClientFactory _httpClientFactory;
 
         public ClientController(IHttpClientFactory httpClientFactory)
@@ -33,15 +33,19 @@ namespace LoginUser.WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> GetAll(AuthenticationModel model)
         {
-            try
-            {
                 //TODO to musialem usunac aby poszli gdy model.email = null, jakos inaczej trza!
-                //if (!ModelState.IsValid)
-                //{
+                // model.Email="admin@example.com";
+                // if (!ModelState.IsValid)
+                // {
                 //    return View(model);
-                //}
+                // }
 
-                var client = _httpClientFactory.CreateClient();
+                //Todo problem z ssl to rozwiazuje jak dodac ogolnie a nie do metody! patrz program.cs
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                HttpClient client = new HttpClient(clientHandler);
+
+                //var client = _httpClientFactory.CreateClient();
 
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{AppiUrl}/Client");
 
@@ -86,11 +90,6 @@ namespace LoginUser.WebApp.Controllers
                     return RedirectToAction(nameof(ViewClientFromApi));
                 }
                 return View();
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         public ActionResult ViewClientFromApi()

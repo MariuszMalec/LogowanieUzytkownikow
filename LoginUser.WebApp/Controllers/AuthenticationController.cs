@@ -15,13 +15,16 @@ namespace LoginUser.WebApp.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private const string AppiUrl = "https://localhost:44352/api";
-        IHttpClientFactory _httpClientFactory;
+        private const string AppiUrl = "https://localhost:5001/api";
+        private const string _clientUrl = "api/Login";
+        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         // GET: AuthenticationController
 
         public AuthenticationController(IHttpClientFactory httpClientFactory)
         {
+            //_httpClient = httpClientFactory.CreateClient("LoginUserApi");//TODO patrz startup
             _httpClientFactory = httpClientFactory;
         }
 
@@ -46,7 +49,12 @@ namespace LoginUser.WebApp.Controllers
                     return View(model);
                 }
 
-                HttpClient client = _httpClientFactory.CreateClient();
+                //Todo problem z ssl to rozwiazuje jak dodac ogolnie a nie do metody! patrz program.cs
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                HttpClient client = new HttpClient(clientHandler);
+
+                //HttpClient client = _httpClientFactory.CreateClient();
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"{AppiUrl}/Account/Register");
 
@@ -103,7 +111,12 @@ namespace LoginUser.WebApp.Controllers
                     return View(model);
                 }
 
-                HttpClient client = _httpClientFactory.CreateClient();
+                //Todo problem z ssl to rozwiazuje jak dodac ogolnie a nie do metody! patrz program.cs
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                HttpClient client = new HttpClient(clientHandler);
+
+                //HttpClient client = _httpClientFactory.CreateClient();
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"{AppiUrl}/Account/Login");
 
@@ -112,6 +125,8 @@ namespace LoginUser.WebApp.Controllers
                 request.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
                 var result = await client.SendAsync(request);
+
+                //var result = await _httpClient.GetAsync(_clientUrl);//pobiera do headera apikey ze startupu
 
                 var content = await result.Content.ReadAsStringAsync();
 
